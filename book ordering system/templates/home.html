@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookify-Home</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/home.css') }}"
+    />
+  </head>
+  <style>
+    /* Additional CSS */
+    header .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-right: 20px; /* Add margin to the right */
+    }
+    footer {
+      background: linear-gradient(
+        to right,
+        #e2e2e2,
+        #c9d6ff
+      ); /* Adjust background color as needed */
+      padding: 20px;
+    }
+    /* Additional CSS */
+    .popular-books-heading {
+      text-align: left; /* Align the heading to the left */
+      margin-top: 20px; /* Add some top margin for spacing */
+      margin-left: 10px; /* Add left margin for positioning */
+      color: black;
+    }
+
+    .popular-books {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-bottom: 20px; /* Add some space at the bottom for better appearance */
+    }
+
+    .popular-books .book-info {
+      display: inline-block;
+      margin-right: 20px; /* Adjust as needed */
+      margin-bottom: 20px; /* Add space between rows */
+    }
+
+    .popular-books img {
+      width: 100px; /* Adjust as needed */
+      margin-right: 120px; /* Add space between images */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+      border-radius: 10px; /* Curve effect */
+      transition: transform 0.3s ease-in-out; /* Transition effect */
+    }
+
+    .popular-books img:hover {
+      transform: scale(1.05); /* Increase size on hover */
+      z-index: 1; /* Bring to front */
+    }
+
+    .book-details {
+      text-align: left;
+      margin-top: 20px; /* Add space between image and details */
+      color: black;
+    }
+
+    .book-details h3 {
+      margin: 5px 0;
+      font-size: 13px; /* Adjust font size */
+    }
+
+    .book-details p {
+      margin: 5px 0;
+      font-weight: bold;
+      font-size: 12px; /* Adjust font size */
+      color: black;
+    }
+    .popular-books {
+      text-align: right;
+      margin-top: 20px;
+    }
+    .popular-books-subtitle {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+      font-size: 25px;
+    }
+    .user-icon {
+      width: 40px;
+      height: 40px;
+      overflow: hidden;
+      border-radius: 50%;
+      position: absolute; /* Change position to relative */
+      right: -100px;
+      top: 10px;
+      z-index: 999; /* Ensure it's on top of other elements */
+      cursor: pointer; /* Add cursor pointer */
+    }
+
+    .user-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cart-icon {
+      width: 40px; /* Adjust the width */
+      height: 40px; /* Adjust the height */
+      overflow: hidden;
+      border-radius: 20%;
+      position: absolute;
+      top: 10px; /* Adjust as needed */
+      right: -10px; /* Adjust as needed */
+      z-index: 999; /* Ensure it's on top of other elements */
+    }
+
+    .cart-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Style the dropdown button */
+    .dropbtn {
+      background-color: #4caf50;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+    }
+
+    /* The container <div> - needed to position the dropdown content */
+    .dropdown {
+      position: absolute;
+      top: 50px; /* Adjust position */
+      right: 0; /* Adjust position */
+      display: none; /* Hide by default */
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    /* Change color of dropdown links on hover */
+    .dropdown-content a:hover {
+      background-color: #ddd;
+    }
+
+    /* Show the dropdown menu */
+    .show {
+      display: block;
+    }
+    .category-section {
+      text-align: center;
+      margin: 20px 0;
+      padding: 10px;
+      background-color: black;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-section a {
+      display: inline-block;
+      margin: 0 15px;
+      padding: 10px 20px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-size: 16px;
+      background-color: #ffffff;
+      border: 2px solid #007bff;
+      border-radius: 5px;
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    }
+
+    .category-section a:hover {
+      background-color: #007bff;
+      color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    }
+  </style>
+  <body>
+    <header>
+      <div><a class="title" href="/home">BOOKIFY</a></div>
+      <div class="cart-icon">
+        <a href="/cart">
+          <img
+            src="{{ url_for('static', filename='imgs/cart.png') }}"
+            alt="Cart"
+          />
+          <span class="cart-notification">{{cartcount}}</span>
+        </a>
+      </div>
+      <div class="user-icon" onclick="toggleDropdown()">
+        <a href="/account">
+          <img src="{{ userurl }}" alt="Profile Picture" />
+        </a>
+        <div id="dropdown" class="dropdown">
+          <button class="dropbtn">User</button>
+          <div class="dropdown-content">
+            <a href="#">Profile</a>
+            <a href="#">Settings</a>
+            <a href="#">Logout</a>
+          </div>
+        </div>
+      </div>
+      <nav>
+        <a href="/home">Home</a>
+        <a href="/account">My Account</a>
+        <a href="/orders">Orders</a>
+        <a href="/subscriptions">Subscriptions</a>
+        <a href="/contact">Contact</a>
+      </nav>
+    </header>
+
+    <!-- carousel -->
+    <div class="carousel">
+      <div class="list">
+        {% for book in popularbooks %}
+        <div class="item">
+          <img src="{{ book.bgimgurl }}" alt="{{ book.title }}" />
+          <div class="content">
+            <div class="author">{{ book.author }}</div>
+            <div class="title">{{ book.title }}</div>
+            <div class="des">{{ book.description }}</div>
+            <div class="price">${{ book.price }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="thumbnail">
+        {% for book in popularbooks %}
+        <div class="item">
+          <img src="{{ book.fgimgurl }}" alt="{{ book.title }}" />
+          <div class="content">
+            <div class="title">{{ book.title }}</div>
+            <div class="description">{{ book.author }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="arrows">
+        <button id="prev"><</button>
+        <button id="next">></button>
+      </div>
+      <div class="time"></div>
+    </div>
+
+    <!-- Category Section -->
+    <div class="category-section">
+      <a href="#popular-books">Popular Books</a>
+      <a href="#student-edition">Student Edition</a>
+      <a href="#kids-story-books">Kids Story Books</a>
+      <a href="#magazines">Magazines</a>
+    </div>
+
+    <footer>
+      <h2 id="popular-books" class="popular-books-heading">Popular Books</h2>
+      <div class="popular-books">
+        {% for book in popularbooks %}
+        <div class="book-info">
+          <a href="/description?id={{ book['id'] }}">
+            <img src="{{ book['fgimgurl'] }}" alt="{{ book['title'] }}" />
+            <div class="book-details">
+              <h3>{{ book['title'] }}</h3>
+              <p>${{ book['price'] }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+      <h2 id="student-edition" class="popular-books-heading">
+        Student Edition
+      </h2>
+      <div class="popular-books">
+        {% for book in students %}
+        <div class="book-info">
+          <a href="/description?id={{ book['id'] }}">
+            <img src="{{ book['fgimgurl'] }}" alt="{{ book['title'] }}" />
+            <div class="book-details">
+              <h3>{{ book['title'] }}</h3>
+              <p>${{ book['price'] }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+      <h2 id="kids-story-books" class="popular-books-heading">
+        Kids Story Books
+      </h2>
+      <div class="popular-books">
+        {% for book in kidsbooks %}
+        <div class="book-info">
+          <a href="/description?id={{ book['id'] }}">
+            <img src="{{ book['fgimgurl'] }}" alt="{{ book['title'] }}" />
+            <div class="book-details">
+              <h3>{{ book['title'] }}</h3>
+              <p>${{ book['price'] }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+      <h2 id="magazines" class="popular-books-heading">Magazines</h2>
+      <div class="popular-books">
+        {% for book in magazine %}
+        <div class="book-info">
+          <a href="/description?id={{ book['id'] }}">
+            <img src="{{ book['fgimgurl'] }}" alt="{{ book['title'] }}" />
+            <div class="book-details">
+              <h3>{{ book['title'] }}</h3>
+              <p>${{ book['price'] }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+
+    <script>
+      // Function to toggle the dropdown menu
+      function toggleDropdown() {
+        var dropdown = document.getElementById("dropdown");
+        dropdown.classList.toggle("show");
+      }
+
+      // Close the dropdown menu if the user clicks outside of it
+      window.onclick = function (event) {
+        if (
+          !event.target.matches(".user-icon") &&
+          !event.target.matches(".user-icon img")
+        ) {
+          var dropdowns = document.getElementsByClassName("dropdown");
+          var i;
+          for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains("show")) {
+              openDropdown.classList.remove("show");
+            }
+          }
+        }
+      };
+    </script>
+  </body>
+</html>

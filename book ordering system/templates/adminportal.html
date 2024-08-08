@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookify-Admin</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+      }
+
+      .title {
+        font-size: 24px;
+        font-weight: bold;
+        color: black;
+        text-decoration: none;
+      }
+      footer {
+        background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+        text-align: center;
+        padding: 10px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 10px;
+      }
+      /* Form container */
+form {
+  width: 50%;
+  margin: 0 auto;
+}
+
+/* Form labels */
+label {
+  font-weight: bold;
+  margin-bottom: 0px;
+  display: block;
+}
+
+/* Form input fields */
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 400px;
+  padding: 7px;
+  margin: 0px 0 20px 0;
+  box-sizing: border-box;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: #f8f8f8;
+  transition: border-color 0.3s ease;
+  font-size: 18px;
+}
+
+/* Form input field hover effect */
+input[type="text"]:hover,
+input[type="number"]:hover,
+textarea:hover {
+  border-color: #999;
+}
+
+/* Form input field focus effect */
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+/* Submit button */
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 20px;
+}
+
+/* Submit button hover effect */
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Submit button active effect */
+input[type="submit"]:active {
+  background-color: #3e8e41;
+}
+
+      
+    </style>
+  </head>
+  <body>
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+    <header>
+      <div>
+        <div><a class="title" href="/home">BOOKIFY-ADMIN<br></br></a></div>
+        <form action="/add_book" method="POST">
+            <label for="title">Title:</label><br>
+            <input type="text" id="title" name="title" required><br>
+            
+            <label for="author">Author:</label><br>
+            <input type="text" id="author" name="author" required><br>
+            
+            <label for="description">Description:</label><br>
+            <textarea id="description" name="description" required></textarea><br>
+            
+            <label for="category">Category:</label><br>
+            <input type="text" id="category" name="category" required><br>
+            
+            <label for="price">Price:</label><br>
+            <input type="number" id="price" name="price" min="0" required><br>
+            
+            <label for="bgimgurl">Background Image URL:</label><br>
+            <input type="text" id="bgimgurl" name="bgimgurl" required><br>
+            
+            <label for="fgimgurl">Foreground Image URL:</label><br>
+            <input type="text" id="fgimgurl" name="fgimgurl" required><br>
+            
+            <label for="type">Type:</label><br>
+            <input type="text" id="type" name="type" required><br>
+            
+            <input style="background-color: darkgreen" type="submit" value="Submit">
+          </form>
+          
+      </div>
+    </main>
+    <footer>
+      <p>&copy; 2024 Bookify</p>
+    </footer>
+  </body>
+</html>

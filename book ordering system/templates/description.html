@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookify-Home</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/home.css') }}"
+    />
+  </head>
+  <style>
+    /* Additional CSS */
+    header .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-right: 20px; /* Add margin to the right */
+    }
+    footer {
+      background: linear-gradient(
+        to right,
+        #e2e2e2,
+        #c9d6ff
+      ); /* Adjust background color as needed */
+      padding: 20px;
+    }
+    /* Additional CSS */
+    .popular-books-heading {
+      text-align: left; /* Align the heading to the left */
+      margin-top: 20px; /* Add some top margin for spacing */
+      margin-left: 10px; /* Add left margin for positioning */
+      color: black;
+    }
+
+    .popular-books {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-bottom: 20px; /* Add some space at the bottom for better appearance */
+    }
+
+    .popular-books .book-info {
+      display: inline-block;
+      margin-right: 20px; /* Adjust as needed */
+      margin-bottom: 20px; /* Add space between rows */
+    }
+
+    .popular-books img {
+      width: 100px; /* Adjust as needed */
+      margin-right: 120px; /* Add space between images */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+      border-radius: 10px; /* Curve effect */
+      transition: transform 0.3s ease-in-out; /* Transition effect */
+    }
+
+    .popular-books img:hover {
+      transform: scale(1.05); /* Increase size on hover */
+      z-index: 1; /* Bring to front */
+    }
+
+    .book-details {
+      text-align: left;
+      margin-top: 20px; /* Add space between image and details */
+      color: black;
+    }
+
+    .book-details h3 {
+      margin: 5px 0;
+      font-size: 13px; /* Adjust font size */
+    }
+
+    .book-details p {
+      margin: 5px 0;
+      font-weight: bold;
+      font-size: 12px; /* Adjust font size */
+      color: black;
+    }
+    .popular-books {
+      text-align: right;
+      margin-top: 20px;
+    }
+    .popular-books-subtitle {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+      font-size: 25px;
+    }
+    .user-icon {
+      width: 40px;
+      height: 40px;
+      overflow: hidden;
+      border-radius: 50%;
+      position: absolute;
+      top: 10px; /* Adjust as needed */
+      right: -100px; /* Adjust as needed */
+      z-index: 999; /* Ensure it's on top of other elements */
+    }
+
+    .user-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cart-icon {
+      width: 40px; /* Adjust the width */
+      height: 40px; /* Adjust the height */
+      overflow: hidden;
+      border-radius: 20%;
+      position: absolute;
+      top: 10px; /* Adjust as needed */
+      right: -10px; /* Adjust as needed */
+      z-index: 999; /* Ensure it's on top of other elements */
+    }
+
+    .cart-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cart-notification {
+      position: absolute;
+      top: -5px; /* Adjust vertical position */
+      right: -5px; /* Adjust horizontal position */
+      background-color: red; /* Cart count background color */
+      color: white;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 50%;
+    }
+  </style>
+  <body>
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class="flash-messages">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+    <header>
+      <div class="title">BOOKIFY</div>
+      <nav>
+        <a href="/home">Home</a>
+        <a href="/account">My Account</a>
+        <a href="/orders">Orders</a>
+        <a href="/subscriptions">Subscriptions</a>
+        <a href="/contact">Contact</a>
+      </nav>
+      <div class="cart-icon">
+        <a href="/cart">
+          <img
+            src="{{ url_for('static', filename='imgs/cart.png') }}"
+            alt="Cart"
+          />
+          <span class="cart-notification">{{cartcount}}</span>
+          <!-- Fixed cart count -->
+        </a>
+        <h1>hi</h1>
+      </div>
+      <a href="/account">
+        <div class="user-icon"><img src="{{ userurl }}" alt="User Image" /></div
+      ></a>
+    </header>
+
+    <!-- carousel -->
+    <!-- carousel -->
+    <div class="carousel">
+      <!-- list item -->
+      <div class="list">
+        <!-- Fixed book in the carousel -->
+        <div class="item">
+          <img
+            src="{{ all_books[item].bgimgurl }}"
+            alt="{{ all_books[item].title }}"
+          />
+          <div class="content">
+            <div class="author">{{ all_books[item].author }}</div>
+            <div class="title">{{ all_books[item].title }}</div>
+            <div class="des">{{ all_books[item].description }}</div>
+            <div class="buttons">
+              <a href="/addbook?id={{ id }}">
+                <button class="transparent-button">ADD CART</button>
+              </a>
+            </div>
+            <div class="price">${{ all_books[item].price }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <h2 class="popular-books-heading">Popular Books</h2>
+      <div class="popular-books">
+        {% for book in popularbooks %}
+        <div class="book-info">
+          <a href="/description?id={{ book['id'] }}">
+            <img src="{{ book['fgimgurl'] }}" alt="{{ book['title'] }}" />
+            <div class="book-details">
+              <h3>{{ book['title'] }}</h3>
+              <p>${{ book['price'] }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+      <h2 class="popular-books-heading">Student Edition</h2>
+      <div class="popular-books">
+        {% for book in students %}
+        <div class="book-info">
+          <a href="/description?id={{ book['id'] }}">
+            <img src="{{ book['fgimgurl'] }}" alt="{{ book['title'] }}" />
+            <div class="book-details">
+              <h3>{{ book['title'] }}</h3>
+              <p>${{ book['price'] }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+      <h2 class="popular-books-heading">Kids Story Books</h2>
+      <div class="popular-books">
+        {% for book in kidsbooks %}
+        <div class="book-info">
+          <a href="/description?id={{ book['id'] }}">
+            <img src="{{ book['fgimgurl'] }}" alt="{{ book['title'] }}" />
+            <div class="book-details">
+              <h3>{{ book['title'] }}</h3>
+              <p>${{ book['price'] }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+      <h2 class="popular-books-heading">Magazines</h2>
+      <div class="popular-books">
+        {% for book in magazine %}
+        <div class="book-info">
+          <a href="/description?id={{ book['id'] }}">
+            <img src="{{ book['fgimgurl'] }}" alt="{{ book['title'] }}" />
+            <div class="book-details">
+              <h3>{{ book['title'] }}</h3>
+              <p>${{ book['price'] }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+  </body>
+</html>
